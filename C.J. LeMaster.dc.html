@@ -27,7 +27,7 @@
 
   <!-- ============================ NAV ============================ -->
   <nav style="position:fixed; top:0; left:0; right:0; z-index:60; height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(20px,5vw,72px); background:rgba(244,241,234,.92); backdrop-filter:blur(12px); border-bottom:1px solid #d9d4c8;">
-    <a href="#top" style="font-family:'Libre Caslon Display',serif; font-size:21px; letter-spacing:.005em; color:#16181c;">C.J. LeMaster</a>
+    <a href="#top" id="navMark" style="font-family:'Libre Caslon Display',serif; font-size:21px; letter-spacing:.005em; color:#16181c;">C.J. LeMaster</a>
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex; align-items:center; gap:34px; font-family:'Libre Franklin',sans-serif; font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:#56544e;">
         <a href="#investigations" style="transition:color .25s;" style-hover="color:#16181c;">Investigations</a>
@@ -66,8 +66,9 @@
   <section id="top" data-screen-label="Hero" style="position:relative; min-height:100vh; display:flex; flex-wrap:wrap; background:#0c0d0f;">
     <div style="flex:1 1 540px; background:#f4f1ea; padding:clamp(96px,13vh,150px) clamp(28px,5vw,76px) clamp(48px,7vh,84px); display:flex; flex-direction:column; justify-content:center;">
       <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#8c3b2f; margin-bottom:clamp(20px,3vh,30px);">Government · Courts · Public Records</div>
-      <h1 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(44px,5.6vw,82px); line-height:.97; letter-spacing:-.015em; color:#121316; margin:0;">Holding Mississippi accountable.</h1>
-      <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(17px,1.4vw,20px); line-height:1.62; color:#3f3d38; max-width:480px; margin:clamp(24px,3.5vh,32px) 0 0;">Investigative reporter and co-anchor in Jackson, pairing shoe-leather reporting with data journalism — work that's led to indictments, firings, and changed state law.</p>
+      <h1 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(48px,6.4vw,94px); line-height:.93; letter-spacing:-.02em; color:#121316; margin:0;">C.J. LeMaster</h1>
+      <div style="font-family:'Libre Caslon Text',Georgia,serif; font-style:italic; font-size:clamp(20px,2vw,28px); line-height:1.28; color:#2a2926; margin:clamp(16px,2.2vh,22px) 0 0;">Holding Mississippi accountable.</div>
+      <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(16px,1.3vw,18.5px); line-height:1.62; color:#56534c; max-width:480px; margin:clamp(20px,2.6vh,26px) 0 0;">Lead investigative reporter and co-anchor in Jackson, pairing shoe-leather reporting with data journalism — work that's led to indictments, firings, and changed state law.</p>
       <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:clamp(30px,4.5vh,42px);">
         <a href="#investigations" style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.04em; color:#f4f1ea; background:#121316; padding:16px 28px; transition:background .25s;" style-hover="background:#2a2c30;">See the investigations</a>
         <a href="#tip" style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.04em; color:#121316; border:1px solid #121316; padding:16px 28px; transition:background .25s,color .25s;" style-hover="background:#121316;color:#f4f1ea;">Submit a tip</a>
@@ -304,7 +305,7 @@
             <div style="display:flex; flex-direction:column; gap:12px; font-family:'Libre Franklin',sans-serif; font-size:14px; color:rgba(244,241,234,.78);">
               <a href="https://x.com/CJLeMaster" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; transition:color .2s;" style-hover="color:#c9776c;">X <span style="color:rgba(244,241,234,.4);">@CJLeMaster</span></a>
               <a href="https://facebook.com/cjlemasternews" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; transition:color .2s;" style-hover="color:#c9776c;">Facebook <span style="color:rgba(244,241,234,.4);">/cjlemasternews</span></a>
-              <a href="/cdn-cgi/l/email-protection#285c41585b684b42444d45495b5c4d5a064b4745" style="transition:color .2s;" style-hover="color:#c9776c;"><span class="__cf_email__" data-cfemail="99edf0e9ead9faf3f5fcf4f8eaedfcebb7faf6f4">[email&#160;protected]</span></a>
+              <a href="/cdn-cgi/l/email-protection#d1b2bebdb4bcb0bfffbdb4bcb0a2a5b4a391a6bdb3a5ffb2bebc" style="transition:color .2s;" style-hover="color:#c9776c;"><span class="__cf_email__" data-cfemail="42212d2e272f232c6c2e272f233136273002352e20366c212d2f">[email&#160;protected]</span></a>
             </div>
           </div>
         </div>
@@ -367,6 +368,21 @@ class Component extends DCLogic {
       this._revealAll();
     }
 
+    // Nav wordmark fades in only after the hero (with the big name) scrolls away.
+    const mark = document.getElementById('navMark');
+    if (mark && tall && scrollable) {
+      mark.style.opacity = '0';
+      mark.style.transition = 'opacity .45s ease';
+      mark.style.pointerEvents = 'none';
+      this._onNavScroll = () => {
+        const past = window.scrollY > window.innerHeight * 0.7;
+        mark.style.opacity = past ? '1' : '0';
+        mark.style.pointerEvents = past ? 'auto' : 'none';
+      };
+      window.addEventListener('scroll', this._onNavScroll, { passive: true });
+      this._onNavScroll();
+    }
+
     this._onResize = () => {
       clearTimeout(this._rt);
       this._rt = setTimeout(() => {
@@ -398,6 +414,7 @@ class Component extends DCLogic {
     if (this._io) this._io.disconnect();
     clearTimeout(this._safety);
     window.removeEventListener('resize', this._onResize);
+    if (this._onNavScroll) window.removeEventListener('scroll', this._onNavScroll);
   }
 
   _revealAll() {
