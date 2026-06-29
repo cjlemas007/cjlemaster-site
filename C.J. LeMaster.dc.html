@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; scroll-padding-top:88px; }
+  body{ margin:0; background:#f4f1ea; color:#16181c; font-family:'Libre Franklin',sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  ::selection{ background:#8c3b2f; color:#f4f1ea; }
+  input,textarea,button,a{ font-family:inherit; }
+  a{ color:inherit; text-decoration:none; }
+  ::placeholder{ color:rgba(244,241,234,.4); }
+  @keyframes kb { from { transform:scale(1.04); } to { transform:scale(1.13) translate(-1.2%,-1.6%); } }
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="position:relative;">
+
+  <!-- ============================ NAV ============================ -->
+  <nav style="position:fixed; top:0; left:0; right:0; z-index:60; height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(20px,5vw,72px); background:rgba(244,241,234,.92); backdrop-filter:blur(12px); border-bottom:1px solid #d9d4c8;">
+    <a href="#top" style="font-family:'Libre Caslon Display',serif; font-size:21px; letter-spacing:.005em; color:#16181c;">C.J. LeMaster</a>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; align-items:center; gap:34px; font-family:'Libre Franklin',sans-serif; font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:#56544e;">
+        <a href="#investigations" style="transition:color .25s;" style-hover="color:#16181c;">Investigations</a>
+        <a href="#data" style="transition:color .25s;" style-hover="color:#16181c;">Data</a>
+        <a href="#about" style="transition:color .25s;" style-hover="color:#16181c;">About</a>
+        <a href="#tip" style="display:inline-flex; align-items:center; gap:8px; color:#16181c; border:1px solid #16181c; padding:10px 18px; transition:background .25s,color .25s;" style-hover="background:#16181c;color:#f4f1ea;"><span style="width:6px; height:6px; background:#8c3b2f; border-radius:50%;"></span>Submit a tip</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px;">
+        <span style="display:block; width:24px; height:2px; background:#16181c;"></span>
+        <span style="display:block; width:24px; height:2px; background:#16181c;"></span>
+        <span style="display:block; width:24px; height:2px; background:#16181c;"></span>
+      </button>
+    </sc-if>
+  </nav>
+
+  <!-- mobile menu overlay -->
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:70; background:#0c0d0f; display:flex; flex-direction:column; padding:clamp(24px,6vw,48px);">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span style="font-family:'Libre Caslon Display',serif; font-size:21px; color:#f4f1ea;">C.J. LeMaster</span>
+        <button onClick="{{ closeMenu }}" aria-label="Close" style="background:none; border:none; color:#f4f1ea; font-size:30px; line-height:1; cursor:pointer;">&times;</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:auto; margin-bottom:auto;">
+        <a href="#investigations" onClick="{{ closeMenu }}" style="font-family:'Libre Caslon Display',serif; font-size:42px; color:#f4f1ea; padding:10px 0;">Investigations</a>
+        <a href="#data" onClick="{{ closeMenu }}" style="font-family:'Libre Caslon Display',serif; font-size:42px; color:#f4f1ea; padding:10px 0;">Data &amp; Tools</a>
+        <a href="#about" onClick="{{ closeMenu }}" style="font-family:'Libre Caslon Display',serif; font-size:42px; color:#f4f1ea; padding:10px 0;">About</a>
+        <a href="#tip" onClick="{{ closeMenu }}" style="font-family:'Libre Caslon Display',serif; font-size:42px; color:#c9776c; padding:10px 0;">Submit a tip</a>
+      </div>
+      <div style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(244,241,234,.4);">Follow the record.</div>
+    </div>
+  </sc-if>
+
+  <!-- ============================ HERO ============================ -->
+  <section id="top" data-screen-label="Hero" style="position:relative; min-height:100vh; display:flex; flex-wrap:wrap; background:#0c0d0f;">
+    <div style="flex:1 1 540px; background:#f4f1ea; padding:clamp(96px,13vh,150px) clamp(28px,5vw,76px) clamp(48px,7vh,84px); display:flex; flex-direction:column; justify-content:center;">
+      <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#8c3b2f; margin-bottom:clamp(20px,3vh,30px);">Government · Courts · Public Records</div>
+      <h1 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(44px,5.6vw,82px); line-height:.97; letter-spacing:-.015em; color:#121316; margin:0;">Holding Mississippi accountable.</h1>
+      <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(17px,1.4vw,20px); line-height:1.62; color:#3f3d38; max-width:480px; margin:clamp(24px,3.5vh,32px) 0 0;">Investigative reporter and co-anchor in Jackson, pairing shoe-leather reporting with data journalism — work that's led to indictments, firings, and changed state law.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:clamp(30px,4.5vh,42px);">
+        <a href="#investigations" style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.04em; color:#f4f1ea; background:#121316; padding:16px 28px; transition:background .25s;" style-hover="background:#2a2c30;">See the investigations</a>
+        <a href="#tip" style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.04em; color:#121316; border:1px solid #121316; padding:16px 28px; transition:background .25s,color .25s;" style-hover="background:#121316;color:#f4f1ea;">Submit a tip</a>
+      </div>
+      <div style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:#9a9488; margin-top:clamp(40px,7vh,72px);">Follow the record.</div>
+    </div>
+    <div style="flex:1 1 460px; position:relative; overflow:hidden; min-height:clamp(380px,54vh,1000px); background:#0c0d0f;">
+      <div id="heroImg" style="position:absolute; inset:0; transform-origin:center; animation:kb 26s ease-in-out infinite alternate; background-image:url('assets/headshot-serious.jpg'); background-size:cover; background-position:58% 22%; filter:grayscale(.4) brightness(.66) contrast(1.05) saturate(.82);"></div>
+      <div style="position:absolute; inset:0; background:linear-gradient(135deg,#1a2330 0%,#0a0c10 100%); mix-blend-mode:soft-light; opacity:.5;"></div>
+      <div style="position:absolute; inset:0; background:radial-gradient(120% 80% at 50% 38%,transparent 52%,rgba(0,0,0,.5) 100%); pointer-events:none;"></div>
+    </div>
+  </section>
+
+  <!-- ============================ ABOUT ============================ -->
+  <section id="about" data-screen-label="Biography" style="background:#f4f1ea; padding:clamp(80px,11vw,150px) clamp(24px,5vw,72px);">
+    <div style="max-width:1180px; margin:0 auto;">
+      <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1),transform .85s cubic-bezier(.2,.6,.2,1); max-width:760px;">
+        <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#8c3b2f; margin-bottom:22px;">About</div>
+        <h2 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(32px,4.4vw,56px); line-height:1.02; letter-spacing:-.015em; color:#16181c; margin:0;">The work, and what it changed.</h2>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:clamp(36px,5vw,72px); margin-top:clamp(44px,6vw,72px); align-items:flex-start;">
+        <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1) .05s,transform .85s cubic-bezier(.2,.6,.2,1) .05s; flex:1 1 320px; max-width:440px;">
+          <div style="position:relative; aspect-ratio:4/5; overflow:hidden; background:#0c0d0f;">
+            <div style="position:absolute; inset:0; background-image:url('assets/headshot-smile.jpg'); background-size:cover; background-position:54% 28%; filter:grayscale(.22) contrast(1.03) saturate(.92);"></div>
+            <div style="position:absolute; inset:0; background:linear-gradient(160deg,transparent 55%,rgba(10,11,13,.32) 100%);"></div>
+          </div>
+          <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.04em; color:#9a9488; margin-top:14px;">C.J. LeMaster · Jackson, Mississippi</div>
+        </div>
+        <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1) .12s,transform .85s cubic-bezier(.2,.6,.2,1) .12s; flex:1 1 440px;">
+          <div style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(16px,1.25vw,18.5px); line-height:1.75; color:#33312c;">
+            <p style="margin:0 0 22px;">For more than a decade, C.J. LeMaster has been a fixture in central Mississippi living rooms — co-anchoring WLBT News at 5 alongside Maggie Wade and, since 2016, leading the station's investigative unit, <em>3 On Your Side Investigates</em>.</p>
+            <p style="margin:0 0 22px;">His reporting has a track record of consequences. He exposed a pattern of secrecy behind the Jackson Police Department's crime statistics, uncovered a statewide prison extortion scheme, and revealed the misspending of Hinds County election grant money that ended in three convictions and the removal of an election commissioner. A year-long look at side jobs held by a Richland mayor and a Pearl police chief forced both men from office and triggered a state audit, while his investigation into Jackson's water crisis — built on internal emails — led the city to fire a whistleblower and reassign its public works director.</p>
+            <p style="margin:0 0 22px;">That work is grounded in the public record. With deep command of the Mississippi Public Records Act and Ethics Commission precedent, C.J. presses relentlessly for the documents officials try to withhold — a fight that produced the largest judgment in state history against the City of Jackson for denying records to WLBT. His team has filed four public-records complaints against state and local agencies in eight years and won three.</p>
+            <p style="margin:0;">He pairs that shoe-leather reporting with data journalism, building his own scrapers, pipelines, and interactive tools to surface stories spreadsheets alone would never reveal. A Booneville native, C.J. got his start at Northeast Mississippi Community College, earned a broadcast journalism degree from Mississippi State, and spent nearly a decade at WTVA/WLOV in Tupelo before arriving in Jackson in 2013. He is a member of Investigative Reporters &amp; Editors.</p>
+          </div>
+        </div>
+      </div>
+      <!-- recognition ledger -->
+      <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1),transform .85s cubic-bezier(.2,.6,.2,1); margin-top:clamp(56px,7vw,90px); border-top:1px solid #d4cfc3; padding-top:clamp(28px,3vw,40px);">
+        <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#8c3b2f; margin-bottom:clamp(24px,3vw,36px);">Recognition</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:#d4cfc3; border:1px solid #d4cfc3;">
+          <div style="background:#f4f1ea; padding:30px 26px;"><div style="font-family:'Libre Caslon Display',serif; font-size:48px; line-height:1; color:#16181c;">1</div><div style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.01em; color:#16181c; margin-top:16px;">IRE Award</div><div style="font-family:'Libre Franklin',sans-serif; font-size:12px; color:#6b6760; margin-top:6px; line-height:1.5;">Winner 2024 · Finalist 2019</div></div>
+          <div style="background:#f4f1ea; padding:30px 26px;"><div style="font-family:'Libre Caslon Display',serif; font-size:48px; line-height:1; color:#16181c;">7</div><div style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.01em; color:#16181c; margin-top:16px;">Emmy Nominations</div><div style="font-family:'Libre Franklin',sans-serif; font-size:12px; color:#6b6760; margin-top:6px; line-height:1.5;">Southeast Regional, NATAS</div></div>
+          <div style="background:#f4f1ea; padding:30px 26px;"><div style="font-family:'Libre Caslon Display',serif; font-size:48px; line-height:1; color:#16181c;">6</div><div style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.01em; color:#16181c; margin-top:16px;">First Amendment Awards</div><div style="font-family:'Libre Franklin',sans-serif; font-size:12px; color:#6b6760; margin-top:6px; line-height:1.5;">For excellence, six years running</div></div>
+          <div style="background:#f4f1ea; padding:30px 26px;"><div style="font-family:'Libre Caslon Display',serif; font-size:48px; line-height:1; color:#16181c;">5</div><div style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.01em; color:#16181c; margin-top:16px;">Green Eyeshade Awards</div><div style="font-family:'Libre Franklin',sans-serif; font-size:12px; color:#6b6760; margin-top:6px; line-height:1.5;">Excellence in Southern journalism</div></div>
+        </div>
+        <div style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(15px,1.1vw,17px); line-height:1.65; color:#56534c; margin-top:26px; max-width:780px;">Plus 26 Mississippi Association of Broadcasters awards — and the largest public-records judgment in state history against the City of Jackson.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ INVESTIGATIONS ============================ -->
+  <section id="investigations" data-screen-label="Investigations" style="background:#efebe1; padding:clamp(80px,11vw,150px) clamp(24px,5vw,72px); border-top:1px solid #e2ddd2;">
+    <div style="max-width:1180px; margin:0 auto;">
+      <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1),transform .85s cubic-bezier(.2,.6,.2,1); max-width:760px;">
+        <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#8c3b2f; margin-bottom:22px;">Investigations &amp; Broadcast Work</div>
+        <h2 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(32px,4.4vw,56px); line-height:1.02; letter-spacing:-.015em; color:#16181c; margin:0;">The stories, on the record.</h2>
+        <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(16px,1.2vw,18px); line-height:1.6; color:#4a4842; margin:22px 0 0;">A growing archive of published reporting. Filter by beat or search the headlines — each story links to the full report and broadcast clip on WLBT.</p>
+      </div>
+
+      <!-- view toggle -->
+      <div data-reveal style="transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1); display:flex; gap:32px; align-items:flex-end; margin-top:clamp(40px,5vw,56px); border-bottom:1px solid #d8d3c7;">
+        <button onClick="{{ showMajor }}" style="{{ majorStyle }}">Major Investigations <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; font-weight:400; color:#9a9488;">{{ featuredCount }}</span></button>
+        <button onClick="{{ showAll }}" style="{{ allStyle }}">Full Archive <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; font-weight:400; color:#9a9488;">{{ totalCount }}</span></button>
+      </div>
+
+      <!-- controls -->
+      <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between; margin-top:24px;">
+        <div style="display:flex; flex-wrap:wrap; gap:9px;">
+          <sc-for list="{{ beatList }}" as="b" hint-placeholder-count="6">
+            <button onClick="{{ b.onClick }}" style="{{ b.style }}">{{ b.label }}</button>
+          </sc-for>
+        </div>
+        <div style="position:relative; display:flex; align-items:center;">
+          <span style="position:absolute; left:14px; color:#9a9488; font-size:14px;">⌕</span>
+          <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Search headlines" style="font-size:13px; letter-spacing:.02em; color:#16181c; background:#f7f4ec; border:1px solid #d8d3c7; padding:11px 16px 11px 34px; width:220px; outline:none;" style-focus="border-color:#8c3b2f;" />
+        </div>
+      </div>
+
+      <div style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#9a9488; margin:18px 0 28px;">{{ resultCount }} stories</div>
+
+      <!-- grid -->
+      <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:clamp(20px,2.4vw,32px);">
+          <sc-for list="{{ filtered }}" as="s" hint-placeholder-count="6">
+            <article style="display:flex; flex-direction:column; background:#f7f4ec; border:1px solid #e2ddd2; transition:transform .35s cubic-bezier(.2,.6,.2,1),box-shadow .35s,border-color .35s;" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(20,20,20,.12);border-color:#cfc9bc;">
+              <div style="position:relative; aspect-ratio:16/9; overflow:hidden; background:#0c0d0f;">
+                <sc-if value="{{ s.hasThumb }}" hint-placeholder-val="{{ false }}">
+                  <img src="{{ s.thumb }}" alt="{{ s.headline }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(.32) contrast(1.03) saturate(.82) brightness(.92);" />
+                  <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(8,9,11,.28) 0%,transparent 38%,rgba(8,9,11,.42) 100%);"></div>
+                </sc-if>
+                <sc-if value="{{ s.noThumb }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:absolute; inset:0; background:linear-gradient(135deg,#222831 0%,#0d0f12 70%),repeating-linear-gradient(48deg,rgba(255,255,255,.02) 0 2px,transparent 2px 15px);"></div>
+                  <div style="position:absolute; inset:0; background:radial-gradient(90% 90% at 30% 20%,rgba(140,59,47,.18),transparent 60%);"></div>
+                  <div style="position:absolute; right:14px; bottom:13px; font-family:ui-monospace,Menlo,monospace; font-size:10px; letter-spacing:.1em; color:rgba(244,241,234,.3);">[ THUMBNAIL ]</div>
+                </sc-if>
+                <div style="position:absolute; left:14px; top:13px; font-family:ui-monospace,Menlo,monospace; font-size:10px; letter-spacing:.14em; color:rgba(244,241,234,.55);">WLBT · {{ s.beat }}</div>
+                <sc-if value="{{ s.video }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:absolute; left:14px; bottom:13px; display:flex; align-items:center; gap:8px; color:rgba(244,241,234,.78);"><span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border:1px solid rgba(244,241,234,.5); border-radius:50%; font-size:9px; padding-left:2px;">▶</span><span style="font-family:'Libre Franklin',sans-serif; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;">Watch</span></div>
+                </sc-if>
+              </div>
+              <div style="display:flex; flex-direction:column; flex:1; padding:24px 24px 22px;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                  <span style="font-family:'Libre Franklin',sans-serif; font-size:10.5px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:#8c3b2f;">{{ s.beat }}</span>
+                  <span style="width:3px; height:3px; background:#c3bdae; border-radius:50%;"></span>
+                  <span style="font-family:'Libre Franklin',sans-serif; font-size:11.5px; letter-spacing:.04em; color:#9a9488;">{{ s.date }}</span>
+                </div>
+                <h3 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:23px; line-height:1.12; letter-spacing:-.01em; color:#16181c; margin:0 0 12px;">{{ s.headline }}</h3>
+                <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:14.5px; line-height:1.58; color:#56534c; margin:0; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">{{ s.summary }}</p>
+                <div style="display:flex; gap:22px; margin-top:22px; padding-top:18px; border-top:1px solid #e6e1d6;">
+                  <a href="{{ s.wlbt }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.05em; color:#16181c; transition:color .2s;" style-hover="color:#8c3b2f;">Read on WLBT <span style="font-size:13px;">↗</span></a>
+                  <sc-if value="{{ s.video }}" hint-placeholder-val="{{ true }}">
+                    <a href="{{ s.videoUrl }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.05em; color:#7a766d; transition:color .2s;" style-hover="color:#8c3b2f;"><span style="font-size:9px;">▶</span> Watch</a>
+                  </sc-if>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:60px 0; text-align:center; font-family:'Libre Caslon Text',Georgia,serif; font-style:italic; font-size:19px; color:#7a766d;">No stories match that search yet.</div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- ============================ DATA & TOOLS ============================ -->
+  <section id="data" data-screen-label="Data Journalism" style="background:#0c0d0f; color:#f4f1ea; padding:clamp(84px,12vw,160px) clamp(24px,5vw,72px); position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0; background:radial-gradient(80% 60% at 80% 0%,rgba(140,59,47,.12),transparent 60%); pointer-events:none;"></div>
+    <div style="max-width:1180px; margin:0 auto; position:relative;">
+      <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1),transform .85s cubic-bezier(.2,.6,.2,1); max-width:780px;">
+        <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#c9776c; margin-bottom:22px;">Data Journalism &amp; Interactive Tools</div>
+        <h2 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(32px,4.6vw,58px); line-height:1.02; letter-spacing:-.015em; color:#f6f3ec; margin:0;">Tools that turn records into reporting.</h2>
+        <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(16px,1.25vw,18.5px); line-height:1.68; color:rgba(244,241,234,.7); margin:24px 0 0;">When the documents come as raw data, I build the machinery to read them — scrapers, pipelines, and interactive tools that have powered investigations and put public information back in public hands.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:clamp(20px,2.4vw,30px); margin-top:clamp(48px,6vw,76px);">
+        <sc-for list="{{ tools }}" as="t" hint-placeholder-count="4">
+          <a href="{{ t.detailHref }}" data-reveal style="transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1),border-color .35s,background .35s; display:flex; flex-direction:column; background:#13161b; border:1px solid #23272e;" style-hover="border-color:#3a3f48;background:#161a20;">
+            <div style="position:relative; aspect-ratio:16/10; overflow:hidden; background:#090a0d; border-bottom:1px solid #23272e;">
+              <sc-if value="{{ t.hasShot }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ t.screenshot }}" alt="{{ t.name }}" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+                <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(9,10,13,.15) 0%,transparent 42%,rgba(9,10,13,.28) 100%);"></div>
+              </sc-if>
+              <sc-if value="{{ t.noShot }}" hint-placeholder-val="{{ true }}">
+                <div style="position:absolute; inset:0; background:linear-gradient(135deg,#1b2330 0%,#0a0c10 75%),repeating-linear-gradient(48deg,rgba(255,255,255,.022) 0 2px,transparent 2px 16px);"></div>
+                <div style="position:absolute; inset:0; background:{{ t.glow }};"></div>
+                <div style="position:absolute; right:18px; bottom:16px; font-family:ui-monospace,Menlo,monospace; font-size:10px; letter-spacing:.1em; color:rgba(244,241,234,.32);">[ SCREENSHOT ]</div>
+              </sc-if>
+              <div style="position:absolute; left:18px; top:16px; font-family:'Libre Franklin',sans-serif; font-size:10px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#c9776c;">{{ t.tag }}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; flex:1; padding:28px 28px 26px;">
+              <h3 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:25px; line-height:1.1; letter-spacing:-.01em; color:#f6f3ec; margin:0 0 14px;">{{ t.name }}</h3>
+              <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:15px; line-height:1.62; color:rgba(244,241,234,.66); margin:0 0 22px;">{{ t.blurb }}</p>
+              <div style="margin-top:auto; display:inline-flex; align-items:center; gap:8px; font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.06em; color:#f4f1ea;">View the tool <span style="font-size:13px;">↗</span></div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TIP LINE ============================ -->
+  <section id="tip" data-screen-label="Submit a tip" style="background:#08090b; color:#f4f1ea; padding:clamp(84px,12vw,160px) clamp(24px,5vw,72px); position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0; background:radial-gradient(70% 80% at 50% 120%,rgba(140,59,47,.16),transparent 60%); pointer-events:none;"></div>
+    <div style="max-width:880px; margin:0 auto; position:relative;">
+      <div data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1),transform .85s cubic-bezier(.2,.6,.2,1); text-align:center; max-width:680px; margin:0 auto;">
+        <div style="display:inline-flex; align-items:center; gap:9px; font-family:'Libre Franklin',sans-serif; font-size:11px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#c9776c; margin-bottom:26px;"><span style="display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border:1px solid #8c3b2f; border-radius:50%; font-size:9px;">●</span>Confidential intake</div>
+        <h2 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(34px,5vw,64px); line-height:1; letter-spacing:-.015em; color:#f6f3ec; margin:0;">Have a story we should tell?</h2>
+        <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(16px,1.3vw,19px); line-height:1.66; color:rgba(244,241,234,.72); margin:24px 0 0;">If you've seen something that doesn't add up — in a public office, a courtroom, an agency, a company — I want to hear about it. Documents, records, and firsthand accounts all help.</p>
+      </div>
+
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ onSubmit }}" data-reveal style="transition:opacity .85s cubic-bezier(.2,.6,.2,1) .08s,transform .85s cubic-bezier(.2,.6,.2,1) .08s; margin-top:clamp(44px,6vw,64px);">
+          <div style="display:flex; flex-wrap:wrap; gap:clamp(20px,3vw,40px);">
+            <label style="flex:1 1 220px; display:flex; flex-direction:column; gap:11px;">
+              <span style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(244,241,234,.5);">Name <span style="color:rgba(244,241,234,.32); text-transform:none; letter-spacing:0;">— optional</span></span>
+              <input name="name" type="text" autoComplete="off" style="background:transparent; border:none; border-bottom:1px solid rgba(244,241,234,.22); color:#f4f1ea; font-size:16px; padding:8px 0 12px; outline:none; transition:border-color .25s;" style-focus="border-color:#c9776c;" />
+            </label>
+            <label style="flex:1 1 220px; display:flex; flex-direction:column; gap:11px;">
+              <span style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(244,241,234,.5);">Email <span style="color:rgba(244,241,234,.32); text-transform:none; letter-spacing:0;">— optional</span></span>
+              <input name="email" type="email" autoComplete="off" style="background:transparent; border:none; border-bottom:1px solid rgba(244,241,234,.22); color:#f4f1ea; font-size:16px; padding:8px 0 12px; outline:none; transition:border-color .25s;" style-focus="border-color:#c9776c;" />
+            </label>
+          </div>
+          <label style="display:flex; flex-direction:column; gap:11px; margin-top:clamp(26px,3.5vw,38px);">
+            <span style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(244,241,234,.5);">Your tip <span style="color:#c9776c; text-transform:none; letter-spacing:0;">— required</span></span>
+            <textarea name="message" required rows="5" placeholder="Tell me what you know. The more specific, the better." style="background:transparent; border:1px solid rgba(244,241,234,.22); color:#f4f1ea; font-size:16px; line-height:1.6; padding:16px; outline:none; resize:vertical; transition:border-color .25s;" style-focus="border-color:#c9776c;"></textarea>
+          </label>
+          <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:space-between; margin-top:clamp(28px,3.5vw,38px);">
+            <button type="submit" style="font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.05em; color:#121316; background:#f4f1ea; border:none; padding:16px 34px; cursor:pointer; transition:background .25s;" style-hover="background:#fff;">Send securely</button>
+            <p style="font-family:'Libre Franklin',sans-serif; font-size:12px; line-height:1.6; color:rgba(244,241,234,.5); max-width:420px; margin:0;">Anonymous submissions are welcome — no name or email required. For highly sensitive material, ask in your message and I'll share an encrypted channel.</p>
+          </div>
+        </form>
+      </sc-if>
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:clamp(44px,6vw,64px); text-align:center; border:1px solid rgba(244,241,234,.16); padding:clamp(40px,6vw,64px);">
+          <div style="font-family:'Libre Caslon Display',serif; font-size:clamp(28px,3.5vw,40px); color:#f6f3ec;">Message received.</div>
+          <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:17px; line-height:1.65; color:rgba(244,241,234,.7); max-width:480px; margin:18px auto 0;">Thank you — your tip is in. If you left a way to reach you, I'll follow up only if I need more. Every message is read.</p>
+          <button onClick="{{ reset }}" style="margin-top:28px; font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.05em; color:#f4f1ea; background:transparent; border:1px solid rgba(244,241,234,.4); padding:13px 26px; cursor:pointer;">Send another</button>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer data-screen-label="Footer" style="background:#0c0d0f; color:#f4f1ea; padding:clamp(64px,8vw,96px) clamp(24px,5vw,72px) clamp(36px,4vw,48px);">
+    <div style="max-width:1180px; margin:0 auto;">
+      <div style="display:flex; flex-wrap:wrap; gap:clamp(36px,6vw,80px); justify-content:space-between;">
+        <div style="flex:1 1 320px; max-width:420px;">
+          <div style="font-family:'Libre Caslon Display',serif; font-size:30px; color:#f6f3ec;">C.J. LeMaster</div>
+          <p style="font-family:'Libre Caslon Text',Georgia,serif; font-style:italic; font-size:18px; color:rgba(244,241,234,.6); margin:14px 0 0;">Follow the record.</p>
+          <div style="font-family:'Libre Franklin',sans-serif; font-size:12.5px; letter-spacing:.04em; color:rgba(244,241,234,.45); margin-top:22px;">Investigative reporter · Jackson, Mississippi</div>
+        </div>
+        <div style="display:flex; gap:clamp(40px,6vw,80px); flex-wrap:wrap;">
+          <div>
+            <div style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(244,241,234,.4); margin-bottom:18px;">Explore</div>
+            <div style="display:flex; flex-direction:column; gap:12px; font-family:'Libre Franklin',sans-serif; font-size:14px; color:rgba(244,241,234,.78);">
+              <a href="#investigations" style="transition:color .2s;" style-hover="color:#c9776c;">Investigations</a>
+              <a href="#data" style="transition:color .2s;" style-hover="color:#c9776c;">Data &amp; Tools</a>
+              <a href="#about" style="transition:color .2s;" style-hover="color:#c9776c;">About</a>
+              <a href="#tip" style="transition:color .2s;" style-hover="color:#c9776c;">Submit a tip</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Libre Franklin',sans-serif; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(244,241,234,.4); margin-bottom:18px;">Connect</div>
+            <div style="display:flex; flex-direction:column; gap:12px; font-family:'Libre Franklin',sans-serif; font-size:14px; color:rgba(244,241,234,.78);">
+              <a href="https://x.com/CJLeMaster" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; transition:color .2s;" style-hover="color:#c9776c;">X <span style="color:rgba(244,241,234,.4);">@CJLeMaster</span></a>
+              <a href="https://facebook.com/cjlemasternews" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; transition:color .2s;" style-hover="color:#c9776c;">Facebook <span style="color:rgba(244,241,234,.4);">/cjlemasternews</span></a>
+              <a href="mailto:tips@cjlemaster.com" style="transition:color .2s;" style-hover="color:#c9776c;">tips@cjlemaster.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center; margin-top:clamp(48px,6vw,72px); padding-top:26px; border-top:1px solid rgba(244,241,234,.12); font-family:'Libre Franklin',sans-serif; font-size:12px; letter-spacing:.03em; color:rgba(244,241,234,.4);">
+        <span>© {{ year }} C.J. LeMaster. All rights reserved.</span>
+        <span>www.cjlemaster.com</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;reveals&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;kenBurns&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+class Component extends DCLogic {
+  state = {
+    w: (typeof window !== 'undefined' ? window.innerWidth : 1280),
+    beat: 'All',
+    q: '',
+    sent: false,
+    menu: false,
+    stories: [],
+    tools: [],
+    view: 'major',
+  };
+
+  componentDidMount() {
+    if (this.props.kenBurns === false) {
+      const hi = document.getElementById('heroImg');
+      if (hi) hi.style.animation = 'none';
+    }
+    const reveals = this.props.reveals !== false;
+    const tall = document.documentElement.scrollHeight > window.innerHeight + 80;
+    const html = document.documentElement;
+    const prevSB = html.style.scrollBehavior;
+    const y0 = window.scrollY;
+    html.style.scrollBehavior = 'auto';
+    window.scrollTo(0, 24);
+    const scrollable = window.scrollY > 0;
+    window.scrollTo(0, y0);
+    html.style.scrollBehavior = prevSB;
+
+    if (reveals && tall && scrollable) {
+      if (this._root) this._root.querySelectorAll('[data-reveal]').forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(26px)';
+      });
+      this._io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'none';
+            this._io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      this._observe();
+      this._safety = setTimeout(() => this._revealAll(), 6000);
+    } else {
+      this._revealAll();
+    }
+
+    this._onResize = () => {
+      clearTimeout(this._rt);
+      this._rt = setTimeout(() => {
+        if (Math.abs(window.innerWidth - this.state.w) > 40) this.setState({ w: window.innerWidth });
+      }, 130);
+    };
+    window.addEventListener('resize', this._onResize);
+
+    fetch('stories.csv')
+      .then((r) => (r.ok ? r.text() : Promise.reject()))
+      .then((t) => {
+        const parsed = this._parseCSV(t).map((row, i) => this._rowToStory(row, i));
+        if (parsed.length) this.setState({ stories: parsed });
+      })
+      .catch(() => {});
+
+    fetch('tools.csv')
+      .then((r) => (r.ok ? r.text() : Promise.reject()))
+      .then((t) => {
+        const parsed = this._parseCSV(t).map((row) => this._rowToTool(row)).filter((x) => x.name);
+        if (parsed.length) this.setState({ tools: parsed });
+      })
+      .catch(() => {});
+  }
+
+  componentDidUpdate() { this._observe(); }
+
+  componentWillUnmount() {
+    if (this._io) this._io.disconnect();
+    clearTimeout(this._safety);
+    window.removeEventListener('resize', this._onResize);
+  }
+
+  _revealAll() {
+    if (!this._root) return;
+    this._root.querySelectorAll('[data-reveal]').forEach((el) => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  }
+
+  _observe() {
+    if (!this._io || !this._root) return;
+    this._root.querySelectorAll('[data-reveal]').forEach((el) => {
+      if (!el.__obs) { el.__obs = 1; this._io.observe(el); }
+    });
+  }
+
+  _parseCSV(text) {
+    const rows = [];
+    let field = '', row = [], inQ = false;
+    const pushF = () => { row.push(field); field = ''; };
+    const pushR = () => { if (row.length > 1 || (row[0] && row[0].length)) rows.push(row); row = []; };
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+        else field += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ',') pushF();
+      else if (c === '\n') { pushF(); pushR(); }
+      else if (c !== '\r') field += c;
+    }
+    pushF(); pushR();
+    const header = (rows.shift() || []).map((h) => h.trim());
+    return rows.map((r) => { const o = {}; header.forEach((h, idx) => { o[h] = r[idx] != null ? r[idx] : ''; }); return o; });
+  }
+
+  _rowToStory(row, i) {
+    const yes = (v) => ['yes', 'true', '1', 'y'].includes(String(v || '').trim().toLowerCase());
+    const url = (row.url || '').trim();
+    const video = yes(row.video);
+    return {
+      id: i,
+      headline: (row.headline || '').trim(),
+      date: (row.date || '').trim(),
+      beat: (row.beat || '').trim(),
+      summary: (row.summary || '').trim(),
+      wlbt: url,
+      video,
+      videoUrl: video ? url : '',
+      featured: yes(row.featured),
+      thumb: (row.thumb || '').trim(),
+      hasThumb: !!(row.thumb || '').trim(),
+      noThumb: !(row.thumb || '').trim(),
+    };
+  }
+
+  _rowToTool(row) {
+    const yes = (v) => ['yes', 'true', '1', 'y'].includes(String(v || '').trim().toLowerCase());
+    return {
+      slug: (row.slug || '').trim(),
+      name: (row.name || '').trim(),
+      tag: (row.tag || '').trim(),
+      blurb: (row.blurb || '').trim(),
+      description: (row.description || '').trim(),
+      findings: (row.findings || '').trim(),
+      screenshot: (row.screenshot || '').trim(),
+      live: yes(row.live),
+      liveUrl: (row.liveUrl || '').trim(),
+    };
+  }
+
+  // Fallback used until stories.csv loads (or if it fails). Edit stories.csv to change the live list.
+  defaultStories() {
+    const S = [
+      { featured: true, headline: 'UMMC may have violated federal privacy law after ransomware attack', date: 'May 2026', beat: 'Health', summary: 'A ransomware attack crippled the state\u2019s largest hospital \u2014 and may have left it in violation of federal patient-privacy law.', url: 'https://www.wlbt.com/2026/05/22/ummc-may-have-violated-federal-privacy-law-after-ransomware-attack/', video: true },
+      { featured: false, headline: 'Nonprofit donation to Jackson police overlaps with chief\u2019s proposed perks', date: 'May 2026', beat: 'Government', summary: 'A nonprofit\u2019s offer to give up to $100,000 to Jackson police closely tracked the perks proposed for the city\u2019s new chief.', url: 'https://www.wlbt.com/2026/05/19/nonprofit-donation-jackson-police-overlaps-with-chiefs-proposed-perks/', video: true },
+      { featured: false, headline: 'Analysis: Proposed Jackson police chief contract may violate state law', date: 'Apr 2026', beat: 'Government', summary: 'A close reading of the proposed contract for Jackson\u2019s police chief found terms that may run afoul of state law.', url: 'https://www.wlbt.com/2026/04/17/analysis-proposed-jackson-police-chief-contract-may-violate-state-law/', video: false },
+      { featured: false, headline: 'Jackson plastic surgeon surrenders medical license amid patient allegations', date: 'Jan 2026', beat: 'Health', summary: 'A prominent Jackson plastic surgeon gave up his medical license as patients came forward with allegations of botched care.', url: 'https://www.wlbt.com/2026/01/10/jackson-plastic-surgeon-surrenders-medical-license-amid-patient-allegations/', video: false },
+      { featured: true, headline: 'JXN Water hasn\u2019t inspected half of Jackson\u2019s fire hydrants', date: 'Dec 2025', beat: 'Public Records', summary: 'Records showed the utility had not inspected half the city\u2019s hydrants as firefighters struggled to find working ones.', url: 'https://www.wlbt.com/2025/12/23/jxn-water-hasnt-inspected-half-jacksons-fire-hydrants/', video: true },
+      { featured: true, headline: 'The Detective vs. the DA', date: 'Oct 2025', beat: 'Courts', summary: 'A former detective disputes claims he withheld evidence in the attempted-murder case of a Black FedEx driver.', url: 'https://www.wlbt.com/2025/10/02/former-detective-refutes-claims-he-withheld-evidence-case-involving-attempted-murder-black-fedex-driver/', video: true },
+      { featured: true, headline: '\u2018Side Hustle\u2019: The jobs that cost a mayor and a police chief their offices', date: 'Dec 2023', beat: 'Government', summary: 'A year-long look at side jobs held by a Richland mayor and a Pearl police chief forced both from office and prompted a state audit.', url: 'https://www.wlbt.com/2023/12/22/3-your-side-investigates-side-hustle/', video: true },
+      { featured: true, headline: 'Exclusive: Emails reveal staffing shortage threatened to shut down water plants', date: 'Aug 2022', beat: 'Public Records', summary: 'Internal emails exposed staffing shortages that nearly shut Jackson\u2019s water plants \u2014 and led the city to fire a whistleblower.', url: 'https://www.wlbt.com/2022/08/18/exclusive-emails-reveal-staffing-shortage-threatened-shut-down-water-treatment-plants/', video: true },
+      { featured: true, headline: '\u2018Under the Influence\u2019', date: 'Jul 2022', beat: 'Law Enforcement', summary: 'A Rankin County official\u2019s drunken conduct in the hours before he faced a felony charge.', url: 'https://www.wlbt.com/2022/07/14/3-your-side-investigates-under-influence/', video: true },
+      { featured: true, headline: 'Pandemic Profits: How Hinds Co. spent more than $1.8M in election grant funds', date: 'Aug 2021', beat: 'Government', summary: 'An investigation into election grant spending that ended in three convictions and the removal of an election commissioner.', url: 'https://www.wlbt.com/2021/08/12/pandemic-profits-heres-how-hinds-co-spent-more-than-18-million-election-grant-funding/', video: true },
+      { featured: true, headline: 'City of Jackson slapped with largest fine in state history over records', date: 'Aug 2021', beat: 'Public Records', summary: 'Jackson drew the largest Ethics Commission judgment in state history for failing to turn over public records to WLBT.', url: 'https://www.wlbt.com/2021/08/06/city-jackson-slapped-with-largest-fine-state-history-following-wlbt-ethics-complaint/', video: false },
+      { featured: true, headline: '\u2018Pattern of Secrecy\u2019: Misleading numbers behind Jackson\u2019s crime stats', date: 'Jan 2019', beat: 'Law Enforcement', summary: 'How the Jackson Police Department released misleading crime statistics \u2014 and fought to keep the real numbers secret.', url: 'https://www.wlbt.com/2019/01/31/your-side-investigates-pattern-secrecy/', video: true },
+    ];
+    return S.map((s, i) => ({ ...s, id: i, wlbt: s.url, videoUrl: s.video ? s.url : '', thumb: '', hasThumb: false, noThumb: true }));
+  }
+
+  // Fallback used until tools.csv loads (or if it fails). Edit tools.csv to change the live list.
+  defaultTools() {
+    return [
+      { slug: '287g-map', name: '287(g) Enforcement Map', tag: 'Interactive Map', blurb: 'Tracking which Mississippi sheriffs deputized local officers for federal immigration enforcement.', description: 'An interactive county map tracking which Mississippi sheriffs signed 287(g) agreements with ICE, deputizing local officers to carry out federal immigration enforcement.', findings: 'Gave viewers a county-by-county view of where local law enforcement gained federal immigration powers.', screenshot: '', live: false, liveUrl: '' },
+      { slug: 'physician-dashboard', name: 'Physician Accountability Dashboard', tag: 'Searchable Database', blurb: 'A searchable record of Mississippi medical board disciplinary actions.', description: 'A searchable dashboard built from scraped state medical board records, letting anyone look up a physician\u2019s history of findings and sanctions.', findings: 'Surfaced doctors who kept practicing after serious disciplinary findings.', screenshot: '', live: false, liveUrl: '' },
+      { slug: 'salary-explorer', name: 'Public Salary Explorer', tag: 'Data Tool', blurb: 'A searchable index of state and local government salaries.', description: 'A searchable index of state and local government salaries, built from public payroll data.', findings: 'Powered reporting on outlier pay and runaway overtime across public payrolls.', screenshot: '', live: false, liveUrl: '' },
+      { slug: 'docket-tracker', name: 'Court Docket Tracker', tag: 'Automated Pipeline', blurb: 'A nightly scraper that flags long-pending court cases.', description: 'An automated pipeline that scrapes county court dockets every night, flagging long-pending cases.', findings: 'Turned thousands of raw docket entries into an early-warning system for stories on court backlogs.', screenshot: '', live: false, liveUrl: '' },
+    ];
+  }
+
+  renderVals() {
+    const s = this.state;
+    const all = (s.stories && s.stories.length) ? s.stories : this.defaultStories();
+    const viewed = s.view === 'major' ? all.filter((st) => st.featured) : all;
+    // Beat categories are derived from the CSV — add a new beat value and a chip appears automatically.
+    const beatSet = [];
+    viewed.forEach((st) => { if (st.beat && beatSet.indexOf(st.beat) === -1) beatSet.push(st.beat); });
+    const beats = ['All', ...beatSet];
+    const activeBeat = beats.indexOf(s.beat) !== -1 ? s.beat : 'All';
+    const q = s.q.trim().toLowerCase();
+    const filtered = viewed.filter((st) =>
+      (activeBeat === 'All' || st.beat === activeBeat) &&
+      (!q || (st.headline + ' ' + st.summary).toLowerCase().includes(q))
+    );
+    const chipBase = 'font-family:\'Libre Franklin\',sans-serif; font-size:12px; letter-spacing:.04em; padding:9px 16px; cursor:pointer; transition:background .25s,color .25s,border-color .25s;';
+    const beatList = beats.map((b) => ({
+      label: b,
+      onClick: () => this.setState({ beat: b }),
+      style: chipBase + (b === activeBeat
+        ? 'background:#16181c; color:#f4f1ea; border:1px solid #16181c;'
+        : 'background:transparent; color:#56544e; border:1px solid #d2ccbe;'),
+    }));
+    const tabBase = 'font-family:\'Libre Franklin\',sans-serif; font-size:13px; font-weight:600; letter-spacing:.03em; background:none; cursor:pointer; padding:0 0 14px; display:inline-flex; align-items:center; gap:8px; margin-bottom:-1px; transition:color .25s,border-color .25s;';
+    const tabStyle = (active) => tabBase + (active
+      ? 'color:#16181c; border:none; border-bottom:2px solid #8c3b2f;'
+      : 'color:#9a9488; border:none; border-bottom:2px solid transparent;');
+    const glows = [
+      'radial-gradient(80% 80% at 25% 20%,rgba(63,126,168,.22),transparent 60%)',
+      'radial-gradient(80% 80% at 75% 25%,rgba(140,59,47,.22),transparent 60%)',
+      'radial-gradient(80% 80% at 30% 80%,rgba(184,137,58,.2),transparent 60%)',
+      'radial-gradient(80% 80% at 70% 75%,rgba(63,126,168,.2),transparent 60%)',
+    ];
+    const toolsBase = (s.tools && s.tools.length) ? s.tools : this.defaultTools();
+    const toolList = toolsBase.map((t, i) => ({
+      ...t,
+      glow: glows[i % glows.length],
+      hasShot: !!t.screenshot,
+      noShot: !t.screenshot,
+      detailHref: 'Tool.dc.html?tool=' + encodeURIComponent(t.slug),
+    }));
+    const isMobile = s.w < 820;
+    return {
+      rootRef: (el) => { this._root = el; },
+      isMobile,
+      isDesktop: !isMobile,
+      menuOpen: s.menu,
+      toggleMenu: () => this.setState({ menu: true }),
+      closeMenu: () => this.setState({ menu: false }),
+      beatList,
+      q: s.q,
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      filtered,
+      resultCount: filtered.length,
+      hasResults: filtered.length > 0,
+      noResults: filtered.length === 0,
+      tools: toolList,
+      showMajor: () => this.setState({ view: 'major', beat: 'All' }),
+      showAll: () => this.setState({ view: 'all', beat: 'All' }),
+      majorStyle: tabStyle(s.view === 'major'),
+      allStyle: tabStyle(s.view === 'all'),
+      featuredCount: all.filter((st) => st.featured).length,
+      totalCount: all.length,
+      sent: s.sent,
+      notSent: !s.sent,
+      onSubmit: (e) => { e.preventDefault(); this.setState({ sent: true }); },
+      reset: () => this.setState({ sent: false }),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

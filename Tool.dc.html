@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:#f4f1ea; color:#16181c; font-family:'Libre Franklin',sans-serif; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:#8c3b2f; color:#f4f1ea; }
+  a{ color:inherit; text-decoration:none; }
+</style>
+</helmet>
+
+<div style="position:relative; min-height:100vh; display:flex; flex-direction:column;">
+
+  <!-- nav -->
+  <nav style="position:fixed; top:0; left:0; right:0; z-index:50; height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(20px,5vw,72px); background:rgba(244,241,234,.92); backdrop-filter:blur(12px); border-bottom:1px solid #d9d4c8;">
+    <a href="{{ homeHref }}" style="font-family:'Libre Caslon Display',serif; font-size:21px; color:#16181c;">C.J. LeMaster</a>
+    <a href="{{ backHref }}" style="display:inline-flex; align-items:center; gap:9px; font-family:'Libre Franklin',sans-serif; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:#56544e; transition:color .2s;" style-hover="color:#16181c;"><span style="font-size:15px;">←</span> Data &amp; Tools</a>
+  </nav>
+
+  <!-- ===================== FOUND: tool detail ===================== -->
+  <sc-if value="{{ found }}" hint-placeholder-val="{{ true }}">
+  <main style="flex:1; padding:calc(68px + clamp(48px,8vw,96px)) clamp(24px,5vw,72px) clamp(64px,8vw,110px);">
+    <div style="max-width:1080px; margin:0 auto;">
+      <div style="font-family:'Libre Franklin',sans-serif; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:#9a9488; margin-bottom:28px;"><a href="{{ backHref }}" style="color:#9a9488;" style-hover="color:#8c3b2f;">Data &amp; Tools</a> &nbsp;/&nbsp; <span style="color:#56544e;">{{ name }}</span></div>
+
+      <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:#8c3b2f; margin-bottom:20px;">{{ tag }}</div>
+      <h1 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(36px,5.4vw,68px); line-height:.99; letter-spacing:-.015em; color:#16181c; margin:0; max-width:900px;">{{ name }}</h1>
+      <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(17px,1.5vw,21px); line-height:1.6; color:#3f3d38; max-width:720px; margin:clamp(24px,3vw,32px) 0 0;">{{ description }}</p>
+
+      <!-- screenshot -->
+      <div style="position:relative; margin-top:clamp(40px,5vw,60px); aspect-ratio:16/9; background:#0c0d0f; overflow:hidden; box-shadow:0 30px 70px rgba(0,0,0,.22);">
+        <sc-if value="{{ hasShot }}" hint-placeholder-val="{{ false }}">
+          <img src="{{ screenshot }}" alt="{{ name }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#0c0d0f;" />
+        </sc-if>
+        <sc-if value="{{ noShot }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute; inset:0; background:linear-gradient(135deg,#1b2330 0%,#0a0c10 78%),repeating-linear-gradient(48deg,rgba(255,255,255,.02) 0 2px,transparent 2px 18px);"></div>
+          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+            <div style="font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:.16em; color:rgba(244,241,234,.4);">[ TOOL SCREENSHOT ]</div>
+            <div style="font-family:ui-monospace,Menlo,monospace; font-size:10.5px; letter-spacing:.1em; color:rgba(244,241,234,.22);">drop image into tools.csv → screenshot</div>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- findings + cta -->
+      <div style="display:flex; flex-wrap:wrap; gap:clamp(36px,5vw,72px); margin-top:clamp(48px,6vw,80px); align-items:flex-start;">
+        <div style="flex:1 1 420px;">
+          <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#8c3b2f; margin-bottom:18px;">What it revealed</div>
+          <p style="font-family:'Libre Caslon Text',Georgia,serif; font-size:clamp(16px,1.3vw,19px); line-height:1.7; color:#33312c; margin:0; max-width:560px;">{{ findings }}</p>
+        </div>
+        <div style="flex:0 1 340px; width:100%; max-width:380px;">
+          <sc-if value="{{ isLive }}" hint-placeholder-val="{{ false }}">
+            <a href="{{ liveUrl }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; font-family:'Libre Franklin',sans-serif; font-size:13px; font-weight:600; letter-spacing:.04em; color:#f4f1ea; background:#16181c; padding:17px 30px; transition:background .25s;" style-hover="background:#2a2c30;">Open the live tool <span style="font-size:14px;">↗</span></a>
+          </sc-if>
+          <sc-if value="{{ isInternal }}" hint-placeholder-val="{{ true }}">
+            <div style="border:1px solid #d4cfc3; background:#efebe1; padding:26px 26px 28px;">
+              <div style="display:inline-flex; align-items:center; gap:9px; font-family:'Libre Franklin',sans-serif; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#8c3b2f; margin-bottom:14px;"><span style="display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border:1px solid #8c3b2f; border-radius:50%; font-size:8px;">●</span>Internal newsroom tool</div>
+              <p style="font-family:'Libre Franklin',sans-serif; font-size:13.5px; line-height:1.6; color:#56534c; margin:0 0 18px;">Built for newsroom use and not publicly available. Access can be provided on request for verification or collaboration.</p>
+              <a href="{{ requestHref }}" style="display:inline-flex; align-items:center; gap:8px; font-family:'Libre Franklin',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:.04em; color:#16181c; border-bottom:1px solid #8c3b2f; padding-bottom:3px;">Request access <span style="font-size:13px;">↗</span></a>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="margin-top:clamp(56px,7vw,90px); padding-top:28px; border-top:1px solid #d8d3c7;">
+        <a href="{{ backHref }}" style="display:inline-flex; align-items:center; gap:9px; font-family:'Libre Franklin',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#16181c;" style-hover="color:#8c3b2f;"><span style="font-size:15px;">←</span> All data tools</a>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ===================== NOT FOUND: directory ===================== -->
+  <sc-if value="{{ notFound }}" hint-placeholder-val="{{ false }}">
+  <main style="flex:1; padding:calc(68px + clamp(48px,8vw,96px)) clamp(24px,5vw,72px) clamp(64px,8vw,110px);">
+    <div style="max-width:1080px; margin:0 auto;">
+      <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:#8c3b2f; margin-bottom:20px;">Data Journalism &amp; Interactive Tools</div>
+      <h1 style="font-family:'Libre Caslon Display',serif; font-weight:400; font-size:clamp(34px,5vw,60px); line-height:1; letter-spacing:-.015em; color:#16181c; margin:0;">Select a tool.</h1>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; margin-top:clamp(40px,5vw,60px);">
+        <sc-for list="{{ directory }}" as="t" hint-placeholder-count="4">
+          <a href="{{ t.href }}" style="display:flex; flex-direction:column; background:#0c0d0f; transition:transform .3s;" style-hover="transform:translateY(-3px);">
+            <div style="position:relative; aspect-ratio:16/10; overflow:hidden; background:#090a0d;">
+              <div style="position:absolute; inset:0; background:linear-gradient(135deg,#1b2330 0%,#0a0c10 78%),repeating-linear-gradient(48deg,rgba(255,255,255,.02) 0 2px,transparent 2px 16px);"></div>
+              <div style="position:absolute; left:16px; top:14px; font-family:'Libre Franklin',sans-serif; font-size:10px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#c9776c;">{{ t.tag }}</div>
+            </div>
+            <div style="padding:22px 22px 24px;">
+              <div style="font-family:'Libre Caslon Display',serif; font-size:21px; color:#f6f3ec;">{{ t.name }}</div>
+              <div style="font-family:'Libre Franklin',sans-serif; font-size:12px; color:rgba(244,241,234,.6); margin-top:10px; line-height:1.5;">{{ t.blurb }}</div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- footer -->
+  <footer style="background:#0c0d0f; color:rgba(244,241,234,.45); padding:30px clamp(24px,5vw,72px); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-family:'Libre Franklin',sans-serif; font-size:12px; letter-spacing:.03em;">
+    <span>© {{ year }} C.J. LeMaster</span>
+    <span>www.cjlemaster.com</span>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tools: [] };
+
+  componentDidMount() {
+    fetch('tools.csv')
+      .then((r) => (r.ok ? r.text() : Promise.reject()))
+      .then((t) => {
+        const parsed = this._parseCSV(t).map((row) => this._rowToTool(row)).filter((x) => x.name);
+        if (parsed.length) this.setState({ tools: parsed });
+      })
+      .catch(() => {});
+  }
+
+  _parseCSV(text) {
+    const rows = [];
+    let field = '', row = [], inQ = false;
+    const pushF = () => { row.push(field); field = ''; };
+    const pushR = () => { if (row.length > 1 || (row[0] && row[0].length)) rows.push(row); row = []; };
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+        else field += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ',') pushF();
+      else if (c === '\n') { pushF(); pushR(); }
+      else if (c !== '\r') field += c;
+    }
+    pushF(); pushR();
+    const header = (rows.shift() || []).map((h) => h.trim());
+    return rows.map((r) => { const o = {}; header.forEach((h, idx) => { o[h] = r[idx] != null ? r[idx] : ''; }); return o; });
+  }
+
+  _rowToTool(row) {
+    const yes = (v) => ['yes', 'true', '1', 'y'].includes(String(v || '').trim().toLowerCase());
+    return {
+      slug: (row.slug || '').trim(),
+      name: (row.name || '').trim(),
+      tag: (row.tag || '').trim(),
+      blurb: (row.blurb || '').trim(),
+      description: (row.description || '').trim(),
+      findings: (row.findings || '').trim(),
+      screenshot: (row.screenshot || '').trim(),
+      live: yes(row.live),
+      liveUrl: (row.liveUrl || '').trim(),
+    };
+  }
+
+  defaultTools() {
+    return [
+      { slug: '287g-map', name: '287(g) Enforcement Map', tag: 'Interactive Map', blurb: 'Tracking which Mississippi sheriffs deputized local officers for federal immigration enforcement.', description: 'An interactive county map tracking which Mississippi sheriffs signed 287(g) agreements with ICE, deputizing local officers to carry out federal immigration enforcement, and how the program spread across the state.', findings: 'Gave viewers a county-by-county view of where local law enforcement gained federal immigration powers, and documented how quickly the agreements multiplied.', screenshot: '', live: false, liveUrl: '' },
+      { slug: 'physician-dashboard', name: 'Physician Accountability Dashboard', tag: 'Searchable Database', blurb: 'A searchable record of Mississippi medical board disciplinary actions.', description: 'A searchable dashboard built from scraped state medical board records, letting anyone look up a physician\u2019s history of findings, sanctions, and disciplinary actions in seconds.', findings: 'Surfaced doctors who kept practicing after serious disciplinary findings and powered reporting on gaps in how the state oversees its physicians.', screenshot: '', live: false, liveUrl: '' },
+      { slug: 'salary-explorer', name: 'Public Salary Explorer', tag: 'Data Tool', blurb: 'A searchable index of state and local government salaries.', description: 'A searchable index of state and local government salaries, built from public payroll data, that makes it simple to compare pay across agencies and spot outliers.', findings: 'Powered reporting on outlier pay and runaway overtime across public payrolls.', screenshot: '', live: false, liveUrl: '' },
+      { slug: 'docket-tracker', name: 'Court Docket Tracker', tag: 'Automated Pipeline', blurb: 'A nightly scraper that flags long-pending court cases.', description: 'An automated pipeline that scrapes county court dockets every night, flagging long-pending cases and surfacing fresh leads for the courts beat.', findings: 'Turned thousands of raw docket entries into an early-warning system for stories on court delays and backlogs.', screenshot: '', live: false, liveUrl: '' },
+    ];
+  }
+
+  get slug() {
+    const m = (typeof location !== 'undefined' ? (location.search || '') : '').match(/[?&]tool=([^&]+)/);
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+
+  renderVals() {
+    const list = (this.state.tools && this.state.tools.length) ? this.state.tools : this.defaultTools();
+    const home = 'C.J.%20LeMaster.dc.html';
+    const back = home + '#data';
+    const directory = list.map((t) => ({ ...t, href: 'Tool.dc.html?tool=' + encodeURIComponent(t.slug) }));
+    const tool = list.find((t) => t.slug === this.slug);
+    const year = new Date().getFullYear();
+    if (tool) {
+      return {
+        found: true,
+        notFound: false,
+        name: tool.name,
+        tag: tool.tag,
+        description: tool.description,
+        findings: tool.findings,
+        screenshot: tool.screenshot,
+        hasShot: !!tool.screenshot,
+        noShot: !tool.screenshot,
+        isLive: tool.live && !!tool.liveUrl,
+        isInternal: !(tool.live && !!tool.liveUrl),
+        liveUrl: tool.liveUrl || '#',
+        requestHref: 'mailto:tips@cjlemaster.com?subject=' + encodeURIComponent('Tool access request: ' + tool.name),
+        homeHref: home,
+        backHref: back,
+        year,
+      };
+    }
+    return { found: false, notFound: true, directory, homeHref: home, backHref: back, year };
+  }
+}
+</script>
+</body>
+</html>
